@@ -1,0 +1,406 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ai Filler Widget</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app-header">
+        <div class="title">Projects</div>
+        <div class="header-actions">
+          <button id="open-settings" class="btn btn-ghost" title="Settings">
+            Settings
+          </button>
+          <button id="open-projects" class="btn btn-ghost" title="Projects">
+            Home
+          </button>
+          <button id="save-settings" class="btn btn-primary">Save</button>
+          <button id="new-project" class="btn btn-primary" title="New project">+</button>
+        </div>
+      </header>
+
+      <div id="status" class="status hidden"></div>
+
+      <section class="projects">
+        <div id="project-list" class="project-list"></div>
+      </section>
+
+      <section id="project-form" class="project-form hidden">
+        <div class="field">
+          <label for="project-name"
+            >Name <span class="required-asterisk">*</span></label
+          >
+          <input id="project-name" type="text" maxlength="80" placeholder="Enter project name" />
+        </div>
+        <div class="field">
+          <label for="project-description"
+            >Description <span class="required-asterisk">*</span></label
+          >
+          <textarea
+            id="project-description"
+            rows="4"
+            placeholder="Enter product description. Include key details and context."
+          ></textarea>
+          <div class="field-meta">
+            <span id="description-counter">0/200</span>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button id="save-project" class="btn btn-primary">Save</button>
+          <button id="cancel-project" class="btn btn-ghost">Cancel</button>
+        </div>
+      </section>
+
+      <section id="settings-panel" class="settings-panel hidden">
+        <div id="save-status" class="status hidden"></div>
+        <div class="panel">
+          <div class="provider-dropdown">
+            <button
+              id="provider-toggle"
+              class="btn btn-ghost btn-xs"
+              type="button"
+              aria-expanded="false"
+            >
+              API Providers
+            </button>
+          </div>
+
+          <div id="provider-menu" class="provider-menu hidden">
+            <div class="field provider-field" data-provider="openai">
+              <div class="label-row">
+                <label for="api-key-openai">OpenAI API Key</label>
+                <span class="primary-badge" data-provider="openai">Primary</span>
+                <span
+                  id="api-key-indicator-openai"
+                  class="key-indicator"
+                  aria-hidden="true"
+                ></span>
+                <button
+                  id="make-primary-openai"
+                  class="btn btn-ghost btn-xs"
+                  type="button"
+                  data-provider="openai"
+                >
+                  Make primary
+                </button>
+              </div>
+              <input id="api-key-openai" type="password" placeholder="sk-..." />
+              <div class="hint" id="api-key-hint-openai"></div>
+              <div class="field model-field">
+                <label for="model-openai">Model</label>
+                <select id="model-openai">
+                  <option value="gpt-4o-mini">gpt-4o-mini</option>
+                  <option value="gpt-4.1-mini">gpt-4.1-mini</option>
+                  <option value="gpt-5.1-instant">gpt-5.1-instant</option>
+                </select>
+                <div class="hint">Used for OpenAI requests.</div>
+              </div>
+            </div>
+
+            <div class="field provider-field" data-provider="gemini">
+              <div class="label-row">
+                <label for="api-key-gemini">Gemini API Key</label>
+                <span class="primary-badge" data-provider="gemini">Primary</span>
+                <span
+                  id="api-key-indicator-gemini"
+                  class="key-indicator"
+                  aria-hidden="true"
+                ></span>
+                <button
+                  id="make-primary-gemini"
+                  class="btn btn-ghost btn-xs"
+                  type="button"
+                  data-provider="gemini"
+                >
+                  Make primary
+                </button>
+              </div>
+              <input id="api-key-gemini" type="password" placeholder="AI..." />
+              <div class="hint" id="api-key-hint-gemini"></div>
+              <div class="field model-field">
+                <label for="model-gemini">Model</label>
+                <select id="model-gemini">
+                  <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+                  <option value="gemini-1.5-pro">gemini-1.5-pro</option>
+                  <option value="gemini-1.0-pro">gemini-1.0-pro</option>
+                </select>
+                <div class="hint">Used for Gemini requests.</div>
+              </div>
+            </div>
+
+            <div class="field provider-field" data-provider="groq">
+              <div class="label-row">
+                <label for="api-key-groq">GroqCloud API Key</label>
+                <span class="primary-badge" data-provider="groq">Primary</span>
+                <span
+                  id="api-key-indicator-groq"
+                  class="key-indicator"
+                  aria-hidden="true"
+                ></span>
+                <button
+                  id="make-primary-groq"
+                  class="btn btn-ghost btn-xs"
+                  type="button"
+                  data-provider="groq"
+                >
+                  Make primary
+                </button>
+              </div>
+              <input id="api-key-groq" type="password" placeholder="gsk_..." />
+              <div class="hint" id="api-key-hint-groq"></div>
+              <div class="field model-field">
+                <label for="model-groq">Model</label>
+                <select id="model-groq">
+                  <option value="llama-3.1-8b-instant">llama-3.1-8b-instant</option>
+                  <option value="llama-3.1-70b-versatile">llama-3.1-70b-versatile</option>
+                  <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
+                </select>
+                <div class="hint">Used for Groq requests.</div>
+              </div>
+            </div>
+
+            <div class="field provider-field" data-provider="deepseek">
+              <div class="label-row">
+                <label for="api-key-deepseek">Deepseek API Key</label>
+                <span class="primary-badge" data-provider="deepseek">Primary</span>
+                <span
+                  id="api-key-indicator-deepseek"
+                  class="key-indicator"
+                  aria-hidden="true"
+                ></span>
+                <button
+                  id="make-primary-deepseek"
+                  class="btn btn-ghost btn-xs"
+                  type="button"
+                  data-provider="deepseek"
+                >
+                  Make primary
+                </button>
+              </div>
+              <input id="api-key-deepseek" type="password" placeholder="ds_..." />
+              <div class="hint" id="api-key-hint-deepseek"></div>
+              <div class="field model-field">
+                <label for="model-deepseek">Model</label>
+                <select id="model-deepseek">
+                  <option value="deepseek-chat">deepseek-chat</option>
+                  <option value="deepseek-reasoner">deepseek-reasoner</option>
+                  <option value="deepseek-coder">deepseek-coder</option>
+                </select>
+                <div class="hint">Used for Deepseek requests.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="field-dropdown">
+            <button
+              id="field-toggle"
+              class="btn btn-ghost btn-xs"
+              type="button"
+              aria-expanded="false"
+            >
+              Field limits
+            </button>
+          </div>
+
+          <div id="field-menu" class="field-menu hidden">
+            <div class="field">
+              <label>Added fields</label>
+              <div id="preset-fields" class="chips"></div>
+              <div class="hint">Fields saved as presets.</div>
+            </div>
+            <div class="field chip-section">
+              <label>Recent fields</label>
+              <div id="recent-fields" class="chips"></div>
+              <div class="hint">Latest field labels used for fill.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="field-dropdown">
+            <button
+              id="description-toggle"
+              class="btn btn-ghost btn-xs"
+              type="button"
+              aria-expanded="false"
+            >
+              Project description limits
+            </button>
+          </div>
+
+          <div id="description-menu" class="field-menu hidden">
+            <div class="field">
+              <label>Limit size</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input type="radio" name="description-limit" value="small" />
+                  Small (200 chars)
+                </label>
+                <div class="hint">
+                  Current behavior. Short, focused context.
+                </div>
+                <label class="radio-option">
+                  <input type="radio" name="description-limit" value="medium" />
+                  Medium (300 chars)
+                </label>
+                <div class="hint">
+                  More context, higher token usage.
+                </div>
+                <label class="radio-option">
+                  <input type="radio" name="description-limit" value="large" />
+                  Large (500 chars)
+                </label>
+                <div class="hint">
+                  Max context, highest token usage.
+                </div>
+              </div>
+              <div class="hint">
+                Higher limits can increase token usage and cost.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="field">
+            <label for="prompt-language">Language</label>
+            <select id="prompt-language">
+              <option value="English">English</option>
+              <option value="Russian">Русский</option>
+            </select>
+            <div class="hint">Used for the Language line in the prompt.</div>
+          </div>
+          <div class="field">
+            <label for="prompt-temperature">Temperature</label>
+            <select id="prompt-temperature">
+              <option value="0.2">0.2</option>
+              <option value="0.3">0.3</option>
+              <option value="0.4">0.4</option>
+              <option value="0.5">0.5</option>
+              <option value="0.6">0.6</option>
+              <option value="0.7">0.7</option>
+              <option value="0.8">0.8</option>
+              <option value="0.9">0.9</option>
+            </select>
+            <div class="hint">Controls response variation.</div>
+          </div>
+          <div class="field">
+            <label for="prompt-template">Prompt Template</label>
+            <textarea id="prompt-template" rows="6" readonly class="is-locked"></textarea>
+            <div class="hint">Template is locked.</div>
+          </div>
+        </div>
+
+        <div class="panel panel-muted">
+          <div class="field-dropdown docs-actions">
+            <button id="docs-button" class="btn btn-ghost btn-xs" type="button">
+              Docs
+            </button>
+            <button
+              id="report-bug-button"
+              class="btn btn-ghost btn-xs btn-icon-link"
+              type="button"
+              title="Report a bug"
+            >
+              Report bug
+              <span class="btn-icon-inline" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3zM5 5h6v2H7v10h10v-4h2v6H5V5z"
+                  />
+                </svg>
+              </span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="docs-panel" class="docs-panel hidden">
+        <div class="panel">
+          <div class="field-dropdown">
+            <button
+              id="docs-toggle-labels"
+              class="btn btn-ghost btn-xs"
+              type="button"
+              aria-expanded="false"
+            >
+              Field label detection
+            </button>
+          </div>
+
+          <div id="docs-menu-labels" class="field-menu hidden">
+            <div class="field">
+              <label>How we infer field titles</label>
+              <div class="hint docs-content">
+                We normalize multiple sources into a single field label. Priority order:
+              </div>
+              <ul class="docs-list">
+                <li>Explicit labels: label[for] and the closest label.</li>
+                <li>ARIA: aria-label and aria-labelledby.</li>
+                <li>Attributes: placeholder, name, id, title.</li>
+                <li>
+                  Data attributes: data-label, data-field-label, data-title,
+                  data-name, data-placeholder, data-testid.
+                </li>
+                <li>
+                  Nearby text: short headings, hints, legend, or helper text near
+                  the input.
+                </li>
+              </ul>
+              <div class="hint docs-content">
+                We trim whitespace, drop required/optional markers, and pick the best
+                match for the prompt.
+              </div>
+              <div class="hint docs-content">
+                If the field already has a value, we include it in the request; if it
+                is empty, we skip it to save tokens but can still regenerate a new
+                result.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="field-dropdown">
+            <button
+              id="docs-toggle-variation"
+              class="btn btn-ghost btn-xs"
+              type="button"
+              aria-expanded="false"
+            >
+              Avoiding repeated answers
+            </button>
+          </div>
+
+          <div id="docs-menu-variation" class="field-menu hidden">
+            <div class="field">
+              <label>How we reduce repetition</label>
+              <div class="hint docs-content">
+                There's a separate line in the prompt for the field's current value
+                and placeholder. If a value or placeholder exists, we pass it as
+                context and ask the model to use it so it doesn't duplicate the
+                result, but instead produces an updated or alternative phrasing.
+              </div>
+              <div class="hint docs-content">
+                If the field value or placeholder is empty, we simply don't include
+                that line. The behavior stays the same, but the request becomes
+                shorter - saving tokens and reducing cost.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="brand-mark">Ai Filler Widget</div>
+    </div>
+
+    <script src="../utils/storage.js"></script>
+    <script src="../settings/settings.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

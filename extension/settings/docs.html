@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Filler Widget Docs</title>
+    <link rel="stylesheet" href="settings.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app-header">
+        <div class="title">Docs</div>
+      </header>
+
+      <section class="panel-stack">
+        <div class="panel">
+          <div class="field-dropdown">
+            <button
+              id="docs-toggle-labels"
+              class="btn btn-ghost btn-xs"
+              type="button"
+              aria-expanded="false"
+            >
+              Field label detection
+            </button>
+          </div>
+
+          <div id="docs-menu-labels" class="field-menu hidden">
+            <div class="field">
+              <label>How we infer field titles</label>
+              <div class="hint docs-content">
+                We normalize multiple sources into a single field label. Priority order:
+              </div>
+              <ul class="docs-list">
+                <li>Explicit labels: label[for] and the closest label.</li>
+                <li>ARIA: aria-label and aria-labelledby.</li>
+                <li>Attributes: placeholder, name, id, title.</li>
+                <li>
+                  Data attributes: data-label, data-field-label, data-title,
+                  data-name, data-placeholder, data-testid.
+                </li>
+                <li>
+                  Nearby text: short headings, hints, legend, or helper text near
+                  the input.
+                </li>
+              </ul>
+              <div class="hint docs-content">
+                We trim whitespace, drop required/optional markers, and pick the best
+                match for the prompt.
+              </div>
+              <div class="hint docs-content">
+                If the field already has a value, we include it in the request; if it
+                is empty, we skip it to save tokens but can still regenerate a new
+                result.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="field-dropdown">
+            <button
+              id="docs-toggle-variation"
+              class="btn btn-ghost btn-xs"
+              type="button"
+              aria-expanded="false"
+            >
+              Avoiding repeated answers
+            </button>
+          </div>
+
+          <div id="docs-menu-variation" class="field-menu hidden">
+            <div class="field">
+              <label>How we reduce repetition</label>
+              <div class="hint docs-content">
+                There's a separate line in the prompt for the field's current value
+                and placeholder. If a value or placeholder exists, we pass it as
+                context and ask the model to use it so it doesn't duplicate the
+                result, but instead produces an updated or alternative phrasing.
+              </div>
+              <div class="hint docs-content">
+                If the field value or placeholder is empty, we simply don't include
+                that line. The behavior stays the same, but the request becomes
+                shorter - saving tokens and reducing cost.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="docs.js"></script>
+  </body>
+</html>

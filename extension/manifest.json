@@ -1,0 +1,44 @@
+{
+    "manifest_version":  3,
+    "name":  "Ai Filler Widget",
+    "version":  "0.1.0",
+    "description":  "Fill fields using project context.",
+    "action":  {
+                   "default_popup":  "popup/popup.html",
+                   "default_icon":  {
+                                        "16":  "assets/icons/icon-16.png",
+                                        "32":  "assets/icons/icon-32.png",
+                                        "48":  "assets/icons/icon-48.png",
+                                        "128":  "assets/icons/icon-128.png"
+                                    }
+               },
+    "options_page":  "settings/settings.html",
+    "permissions":  [
+                        "storage",
+                        "activeTab",
+                        "scripting"
+                    ],
+    "host_permissions":  [
+                             "\u003call_urls\u003e"
+                         ],
+    "background":  {
+                       "service_worker":  "background/background.js"
+                   },
+    "content_scripts":  [
+                            {
+                                "matches":  [
+                                                "\u003call_urls\u003e"
+                                            ],
+                                "js":  [
+                                           "content/content.js"
+                                       ],
+                                "run_at":  "document_idle"
+                            }
+                        ],
+    "icons":  {
+                  "16":  "assets/icons/icon-16.png",
+                  "32":  "assets/icons/icon-32.png",
+                  "48":  "assets/icons/icon-48.png",
+                  "128":  "assets/icons/icon-128.png"
+              }
+}
