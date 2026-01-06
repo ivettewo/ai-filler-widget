@@ -23,10 +23,10 @@ AI Filler Widget is a browser extension that helps you fill common web form fiel
 - Choose the provider in settings.
 
 ## Required permissions (from extension/manifest.json):
-- storage — save user settings and API keys locally in extension storage.
-- activeTab — run actions on the currently active tab after user interaction.
-- scripting — inject the content script into pages when needed.
-- host_permissions: <all_urls> — allow the extension to run on any website (so it can detect and fill forms
+- storage - save user settings and API keys locally in extension storage.
+- activeTab - run actions on the currently active tab after user interaction.
+- scripting - inject the content script into pages when needed.
+- host_permissions: <all_urls> - allow the extension to run on any website (so it can detect and fill forms
     everywhere).
 
 
