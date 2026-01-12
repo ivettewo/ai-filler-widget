@@ -1,0 +1,17 @@
+# Private signing keys
+ai-filler-widget-key.pem
+ai-filler-widget-key.pfx
+
+# Windows metadata
+Desktop.ini
+desktop.ini
+
+# Built artifacts (keep source only)
+extension.crx
+extension/extension.zip
+
+# Publish assets (screens/marketing)
+publish-content/
+
+# Internal docs
+docs/
